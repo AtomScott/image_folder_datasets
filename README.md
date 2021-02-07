@@ -1,25 +1,12 @@
 
-# Project name here
-> Summary description here.
+# Welcome to Image Folder Datasets
+> Super easy image classification datasets that you can use in an instant!
 
-
-This file will become your README and also the index of your documentation.
 
 ## Install
 
-`pip install your_project_name`
+`pip install image_folder_datasets`
 
 ## How to use
 
 Fill me in please! Don't forget code examples:
-
-```python
-1+1
-```
-
-
-
-
-    2
-
-

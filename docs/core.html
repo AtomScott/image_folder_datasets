@@ -1,6 +1,6 @@
 ---
 
-title: module name here
+title: Core
 
 
 keywords: fastai
@@ -25,6 +25,301 @@ nb_path: "00_core.ipynb"
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/home/atom/.local/lib/python3.6/site-packages/torch/cuda/__init__.py:52: UserWarning: CUDA initialization: The NVIDIA driver on your system is too old (found version 10000). Please update your GPU driver by downloading and installing a new version from the URL: http://www.nvidia.com/Download/index.aspx Alternatively, go to: https://pytorch.org to install a PyTorch version that has been compiled with your version of the CUDA driver. (Triggered internally at  /pytorch/c10/cuda/CUDAFunctions.cpp:100.)
+  return torch._C._cuda_getDeviceCount() &gt; 0
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="ImageFolderDataModule" class="doc_header"><code>class</code> <code>ImageFolderDataModule</code><a href="https://github.com/atomscott/image_folder_datasets/tree/master/image_folder_datasets/core.py#L20" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ImageFolderDataModule</code>(<strong>*<code>args</code></strong>, <strong>**<code>kwargs</code></strong>) :: <code>LightningDataModule</code></p>
+</blockquote>
+<p>A DataModule standardizes the training, val, test splits, data preparation and transforms.
+The main advantage is consistent data splits, data preparation and transforms across models.</p>
+<p>Example::</p>
+
+<pre><code>class MyDataModule(LightningDataModule):
+    def __init__(self):
+        super().__init__()
+    def prepare_data(self):
+        # download, split, etc...
+        # only called on 1 GPU/TPU in distributed
+    def setup(self):
+        # make assignments here (val/train/test split)
+        # called on every process in DDP
+    def train_dataloader(self):
+        train_split = Dataset(...)
+        return DataLoader(train_split)
+    def val_dataloader(self):
+        val_split = Dataset(...)
+        return DataLoader(val_split)
+    def test_dataloader(self):
+        test_split = Dataset(...)
+        return DataLoader(test_split)
+
+</code></pre>
+<p>A DataModule implements 5 key methods:</p>
+<ul>
+<li><strong>prepare_data</strong> (things to do on 1 GPU/TPU not on every GPU/TPU in distributed mode).</li>
+<li><strong>setup</strong>  (things to do on every accelerator in distributed mode).</li>
+<li><strong>train_dataloader</strong> the training dataloader.</li>
+<li><strong>val_dataloader</strong> the val dataloader(s).</li>
+<li><strong>test_dataloader</strong> the test dataloader(s).</li>
+</ul>
+<p>This allows you to share a full dataset without explaining how to download,
+split transform and process the data</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="s1">&#39;Datasets/Affective_Image_Classification_Using_Features_inpired_by_Psychology_and_Art_Theory&#39;</span>
+<span class="n">dm</span> <span class="o">=</span> <span class="n">ImageFolderDataModule</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+<span class="n">dm</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="ow">in</span> <span class="n">dm</span><span class="o">.</span><span class="n">train_dataloader</span><span class="p">():</span>
+    <span class="n">test_eq</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> 
+    <span class="n">test_eq</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> 
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="CNNModel" class="doc_header"><code>class</code> <code>CNNModel</code><a href="https://github.com/atomscott/image_folder_datasets/tree/master/image_folder_datasets/core.py#L48" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>CNNModel</code>(<strong><code>model</code></strong>=<em><code>None</code></em>, <strong><code>pretrained</code></strong>=<em><code>False</code></em>, <strong><code>log_level</code></strong>=<em><code>10</code></em>) :: <code>LightningModule</code></p>
+</blockquote>
+<p>Helper class that provides a standard way to create an ABC using
+inheritance.</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">trainer</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">Trainer</span><span class="p">()</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">CNNModel</span><span class="p">(</span><span class="s1">&#39;vgg11&#39;</span><span class="p">,</span> <span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">trainer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">dm</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>GPU available: False, used: False
+TPU available: None, using: 0 TPU cores
+Downloading: &#34;https://download.pytorch.org/models/vgg11-bbd30ac9.pth&#34; to /home/atom/.cache/torch/hub/checkpoints/vgg11-bbd30ac9.pth
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">KeyboardInterrupt</span>                         Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-88-efa0d05e3276&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> trainer <span class="ansi-blue-fg">=</span> pl<span class="ansi-blue-fg">.</span>Trainer<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>model <span class="ansi-blue-fg">=</span> CNNModel<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;vgg11&#39;</span><span class="ansi-blue-fg">,</span> pretrained<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">True</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> trainer<span class="ansi-blue-fg">.</span>fit<span class="ansi-blue-fg">(</span>model<span class="ansi-blue-fg">,</span> dm<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">&lt;ipython-input-87-8517c97fddae&gt;</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, model, pretrained, log_level)</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> 
+<span class="ansi-green-intense-fg ansi-bold">      6</span>         <span class="ansi-green-fg">assert</span> model <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">not</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;Select model from torchvision&#39;</span>
+<span class="ansi-green-fg">----&gt; 7</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>model <span class="ansi-blue-fg">=</span> eval<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">f&#39;torchvision.models.{model}(pretrained={pretrained})&#39;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      8</span> 
+<span class="ansi-green-intense-fg ansi-bold">      9</span>     <span class="ansi-green-fg">def</span> forward<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> x<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">&lt;string&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+
+<span class="ansi-green-fg">~/.local/lib/python3.6/site-packages/torchvision/models/vgg.py</span> in <span class="ansi-cyan-fg">vgg11</span><span class="ansi-blue-fg">(pretrained, progress, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">    104</span>         progress <span class="ansi-blue-fg">(</span>bool<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span> If <span class="ansi-green-fg">True</span><span class="ansi-blue-fg">,</span> displays a progress bar of the download to stderr
+<span class="ansi-green-intense-fg ansi-bold">    105</span>     &#34;&#34;&#34;
+<span class="ansi-green-fg">--&gt; 106</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">return</span> _vgg<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;vgg11&#39;</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;A&#39;</span><span class="ansi-blue-fg">,</span> <span class="ansi-green-fg">False</span><span class="ansi-blue-fg">,</span> pretrained<span class="ansi-blue-fg">,</span> progress<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    107</span> 
+<span class="ansi-green-intense-fg ansi-bold">    108</span> 
+
+<span class="ansi-green-fg">~/.local/lib/python3.6/site-packages/torchvision/models/vgg.py</span> in <span class="ansi-cyan-fg">_vgg</span><span class="ansi-blue-fg">(arch, cfg, batch_norm, pretrained, progress, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">     91</span>     <span class="ansi-green-fg">if</span> pretrained<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">     92</span>         state_dict = load_state_dict_from_url(model_urls[arch],
+<span class="ansi-green-fg">---&gt; 93</span><span class="ansi-red-fg">                                               progress=progress)
+</span><span class="ansi-green-intense-fg ansi-bold">     94</span>         model<span class="ansi-blue-fg">.</span>load_state_dict<span class="ansi-blue-fg">(</span>state_dict<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     95</span>     <span class="ansi-green-fg">return</span> model
+
+<span class="ansi-green-fg">~/.local/lib/python3.6/site-packages/torch/hub.py</span> in <span class="ansi-cyan-fg">load_state_dict_from_url</span><span class="ansi-blue-fg">(url, model_dir, map_location, progress, check_hash, file_name)</span>
+<span class="ansi-green-intense-fg ansi-bold">    553</span>             r <span class="ansi-blue-fg">=</span> HASH_REGEX<span class="ansi-blue-fg">.</span>search<span class="ansi-blue-fg">(</span>filename<span class="ansi-blue-fg">)</span>  <span class="ansi-red-fg"># r is Optional[Match[str]]</span>
+<span class="ansi-green-intense-fg ansi-bold">    554</span>             hash_prefix <span class="ansi-blue-fg">=</span> r<span class="ansi-blue-fg">.</span>group<span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">if</span> r <span class="ansi-green-fg">else</span> <span class="ansi-green-fg">None</span>
+<span class="ansi-green-fg">--&gt; 555</span><span class="ansi-red-fg">         </span>download_url_to_file<span class="ansi-blue-fg">(</span>url<span class="ansi-blue-fg">,</span> cached_file<span class="ansi-blue-fg">,</span> hash_prefix<span class="ansi-blue-fg">,</span> progress<span class="ansi-blue-fg">=</span>progress<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    556</span> 
+<span class="ansi-green-intense-fg ansi-bold">    557</span>     <span class="ansi-green-fg">if</span> _is_legacy_zip_format<span class="ansi-blue-fg">(</span>cached_file<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">~/.local/lib/python3.6/site-packages/torch/hub.py</span> in <span class="ansi-cyan-fg">download_url_to_file</span><span class="ansi-blue-fg">(url, dst, hash_prefix, progress)</span>
+<span class="ansi-green-intense-fg ansi-bold">    445</span>                   unit=&#39;B&#39;, unit_scale=True, unit_divisor=1024) as pbar:
+<span class="ansi-green-intense-fg ansi-bold">    446</span>             <span class="ansi-green-fg">while</span> <span class="ansi-green-fg">True</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 447</span><span class="ansi-red-fg">                 </span>buffer <span class="ansi-blue-fg">=</span> u<span class="ansi-blue-fg">.</span>read<span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">8192</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    448</span>                 <span class="ansi-green-fg">if</span> len<span class="ansi-blue-fg">(</span>buffer<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">==</span> <span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    449</span>                     <span class="ansi-green-fg">break</span>
+
+<span class="ansi-green-fg">/opt/anaconda3/lib/python3.6/http/client.py</span> in <span class="ansi-cyan-fg">read</span><span class="ansi-blue-fg">(self, amt)</span>
+<span class="ansi-green-intense-fg ansi-bold">    447</span>             <span class="ansi-red-fg"># Amount is given, implement using readinto</span>
+<span class="ansi-green-intense-fg ansi-bold">    448</span>             b <span class="ansi-blue-fg">=</span> bytearray<span class="ansi-blue-fg">(</span>amt<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 449</span><span class="ansi-red-fg">             </span>n <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>readinto<span class="ansi-blue-fg">(</span>b<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    450</span>             <span class="ansi-green-fg">return</span> memoryview<span class="ansi-blue-fg">(</span>b<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">:</span>n<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>tobytes<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    451</span>         <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">/opt/anaconda3/lib/python3.6/http/client.py</span> in <span class="ansi-cyan-fg">readinto</span><span class="ansi-blue-fg">(self, b)</span>
+<span class="ansi-green-intense-fg ansi-bold">    491</span>         <span class="ansi-red-fg"># connection, and the user is reading more bytes than will be provided</span>
+<span class="ansi-green-intense-fg ansi-bold">    492</span>         <span class="ansi-red-fg"># (for example, reading in 1k chunks)</span>
+<span class="ansi-green-fg">--&gt; 493</span><span class="ansi-red-fg">         </span>n <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>fp<span class="ansi-blue-fg">.</span>readinto<span class="ansi-blue-fg">(</span>b<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    494</span>         <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> n <span class="ansi-green-fg">and</span> b<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    495</span>             <span class="ansi-red-fg"># Ideally, we would raise IncompleteRead if the content-length</span>
+
+<span class="ansi-green-fg">/opt/anaconda3/lib/python3.6/socket.py</span> in <span class="ansi-cyan-fg">readinto</span><span class="ansi-blue-fg">(self, b)</span>
+<span class="ansi-green-intense-fg ansi-bold">    584</span>         <span class="ansi-green-fg">while</span> <span class="ansi-green-fg">True</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    585</span>             <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 586</span><span class="ansi-red-fg">                 </span><span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_sock<span class="ansi-blue-fg">.</span>recv_into<span class="ansi-blue-fg">(</span>b<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    587</span>             <span class="ansi-green-fg">except</span> timeout<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    588</span>                 self<span class="ansi-blue-fg">.</span>_timeout_occurred <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">True</span>
+
+<span class="ansi-green-fg">/opt/anaconda3/lib/python3.6/ssl.py</span> in <span class="ansi-cyan-fg">recv_into</span><span class="ansi-blue-fg">(self, buffer, nbytes, flags)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1007</span>                   <span class="ansi-blue-fg">&#34;non-zero flags not allowed in calls to recv_into() on %s&#34;</span> <span class="ansi-blue-fg">%</span>
+<span class="ansi-green-intense-fg ansi-bold">   1008</span>                   self.__class__)
+<span class="ansi-green-fg">-&gt; 1009</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>read<span class="ansi-blue-fg">(</span>nbytes<span class="ansi-blue-fg">,</span> buffer<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1010</span>         <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">   1011</span>             <span class="ansi-green-fg">return</span> socket<span class="ansi-blue-fg">.</span>recv_into<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> buffer<span class="ansi-blue-fg">,</span> nbytes<span class="ansi-blue-fg">,</span> flags<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">/opt/anaconda3/lib/python3.6/ssl.py</span> in <span class="ansi-cyan-fg">read</span><span class="ansi-blue-fg">(self, len, buffer)</span>
+<span class="ansi-green-intense-fg ansi-bold">    869</span>             <span class="ansi-green-fg">raise</span> ValueError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;Read on closed or unwrapped SSL socket.&#34;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    870</span>         <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 871</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_sslobj<span class="ansi-blue-fg">.</span>read<span class="ansi-blue-fg">(</span>len<span class="ansi-blue-fg">,</span> buffer<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    872</span>         <span class="ansi-green-fg">except</span> SSLError <span class="ansi-green-fg">as</span> x<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    873</span>             <span class="ansi-green-fg">if</span> x<span class="ansi-blue-fg">.</span>args<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">==</span> SSL_ERROR_EOF <span class="ansi-green-fg">and</span> self<span class="ansi-blue-fg">.</span>suppress_ragged_eofs<span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">/opt/anaconda3/lib/python3.6/ssl.py</span> in <span class="ansi-cyan-fg">read</span><span class="ansi-blue-fg">(self, len, buffer)</span>
+<span class="ansi-green-intense-fg ansi-bold">    629</span>         &#34;&#34;&#34;
+<span class="ansi-green-intense-fg ansi-bold">    630</span>         <span class="ansi-green-fg">if</span> buffer <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">not</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 631</span><span class="ansi-red-fg">             </span>v <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>_sslobj<span class="ansi-blue-fg">.</span>read<span class="ansi-blue-fg">(</span>len<span class="ansi-blue-fg">,</span> buffer<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    632</span>         <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    633</span>             v <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>_sslobj<span class="ansi-blue-fg">.</span>read<span class="ansi-blue-fg">(</span>len<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">KeyboardInterrupt</span>: </pre>
+</div>
+</div>
+
+</div>
+</div>
 
 </div>
     {% endraw %}

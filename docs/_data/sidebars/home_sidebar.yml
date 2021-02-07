@@ -10,8 +10,11 @@ entries:
       title: Overview
       url: /
     - output: web,pdf
-      title: module name here
+      title: Core
       url: core.html
+    - output: web,pdf
+      title: Tutorial
+      url: tutorial.html
     output: web
     title: image_folder_datasets
   output: web
