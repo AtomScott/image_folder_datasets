@@ -1,4 +1,4 @@
-Datasets/
+Datasets/*/
 
 *.bak
 .gitattributes
