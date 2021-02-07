@@ -55,6 +55,29 @@ nb_path: "index.ipynb"
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Docker-stuff">Docker stuff<a class="anchor-link" href="#Docker-stuff"> </a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span><span class="c1"># make sure you are in the right folder</span>
+<span class="nb">cd</span> ../image_folder_dataset
+
+<span class="c1"># run container</span>
+docker run -it -u atom <span class="se">\</span>
+    -v ./:/mount_data/ <span class="se">\</span>
+    --name image_folder_dataset image_folder_dataset:latest bash
+
+<span class="c1"># delete container</span>
+docker rm image_folder_dataset
+</pre></div>
+
+</div>
+</div>
+</div>
 </div>
  
 
