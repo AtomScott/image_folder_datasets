@@ -14,7 +14,10 @@ from torchvision.datasets import MNIST, ImageFolder
 from torchvision.transforms import ToTensor, Resize, Compose, RandomResizedCrop, Normalize
 import pytorch_lightning as pl
 
-from fastai.vision.data import ImageDataLoaders
+import fastai.vision.augment
+import fastai.vision.data
+# from fastai.vision.data import ImageDataLoaders
+# from fastai.vision.augment import Resize
 
 # Cell
 class ImageFolderDataModule(pl.LightningDataModule):
@@ -34,7 +37,7 @@ class ImageFolderDataModule(pl.LightningDataModule):
         data_dir = self.data_dir
         transform = self.transform
 
-        self.dls = ImageDataLoaders.from_folder(data_dir)
+        self.dls = fastai.vision.data.ImageDataLoaders.from_folder(data_dir, item_tfms=fastai.vision.augment.Resize(224))
         self.trainset = ImageFolder(os.path.join(data_dir, 'train'), transform)
         self.testset = ImageFolder(os.path.join(data_dir, 'valid'), transform)
 
