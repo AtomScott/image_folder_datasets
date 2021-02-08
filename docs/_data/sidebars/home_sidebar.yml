@@ -11,10 +11,10 @@ entries:
       url: /
     - output: web,pdf
       title: Core
-      url: core.html
+      url: /core
     - output: web,pdf
       title: Tutorial
-      url: tutorial.html
+      url: /tutorial
     output: web
     title: image_folder_datasets
   output: web

@@ -1,7 +1,7 @@
 {
   "image_folder_datasets": {
     "Overview": "/",
-    "Core": "core.html",
-    "Tutorial": "tutorial.html"
+    "Core": "/core",
+    "Tutorial": "/tutorial"
   }
 }

@@ -2,7 +2,6 @@
 
 title: Welcome to Image Folder Datasets
 
-
 keywords: fastai
 sidebar: home_sidebar
 
@@ -66,9 +65,13 @@ nb_path: "index.ipynb"
 <div class="highlight"><pre><span></span><span class="c1"># make sure you are in the right folder</span>
 <span class="nb">cd</span> ../image_folder_dataset
 
+<span class="c1"># build container</span>
+docker build -f ./Dockerfile -t image_folder_dataset .
+
 <span class="c1"># run container</span>
-docker run -it -u atom <span class="se">\</span>
-    -v ./:/mount_data/ <span class="se">\</span>
+docker run -it -u root <span class="se">\</span>
+    --runtime nvidia <span class="se">\</span>
+    -v /home/atom/:/mount_data/ <span class="se">\</span>
     --name image_folder_dataset image_folder_dataset:latest bash
 
 <span class="c1"># delete container</span>

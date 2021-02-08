@@ -1,7 +1,7 @@
-repository: "atomscott"/"Image Folder Datasets"
+repository: AtomScott/image_folder_datasets
 output: web
-topnav_title: "Image Folder Datasets"
-site_title: "Image Folder Datasets"
+topnav_title: image_folder_datasets
+site_title: image_folder_datasets
 company_name: openthings
 description: A description of your project
 # Set to false to disable KaTeX math
@@ -56,11 +56,9 @@ defaults:
       search: true
       tooltip: true
 
-sidebars:
-- home_sidebar
-
+sidebars: [home_sidebar]
+baseurl: /
 plugins:
     - jekyll-remote-theme
     
 remote_theme: fastai/nbdev-jekyll-theme
-baseurl: /image_folder_datasets/
