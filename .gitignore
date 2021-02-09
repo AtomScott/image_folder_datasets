@@ -1,4 +1,5 @@
 tb_logs/*
+*.pth
 Datasets/*/
 
 *.bak
