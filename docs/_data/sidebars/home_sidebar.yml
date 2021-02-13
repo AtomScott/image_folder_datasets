@@ -13,8 +13,8 @@ entries:
       title: Core
       url: /core
     - output: web,pdf
-      title: Tutorial
-      url: /tutorial
+      title: 'Tutorial: Fine-Tuning on Cifar10 using an ImageNet pretrained model.'
+      url: /transfer_learning_tutorial
     output: web
     title: image_folder_datasets
   output: web

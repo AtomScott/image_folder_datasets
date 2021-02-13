@@ -2,6 +2,6 @@
   "image_folder_datasets": {
     "Overview": "/",
     "Core": "/core",
-    "Tutorial": "/tutorial"
+    "Tutorial: Fine-Tuning on Cifar10 using an ImageNet pretrained model.": "/transfer_learning_tutorial"
   }
 }

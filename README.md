@@ -1,4 +1,3 @@
-
 # Welcome to Image Folder Datasets
 > Super easy image classification datasets that you can use in an instant!
 
@@ -17,9 +16,13 @@ Fill me in please! Don't forget code examples:
 # make sure you are in the right folder
 cd ../image_folder_dataset
 
+# build container
+docker build -f ./Dockerfile -t image_folder_dataset .
+
 # run container
-docker run -it -u atom \
-    -v ./:/mount_data/ \
+docker run -it -u root \
+    --runtime nvidia \
+    -v /home/atom/:/mount_data/ \
     --name image_folder_dataset image_folder_dataset:latest bash
     
 # delete container
