@@ -101,6 +101,13 @@ split transform and process the data</p>
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Below is an example of how to use a datamodule with transforms.</p>
+
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -119,9 +126,35 @@ split transform and process the data</p>
     <span class="p">]</span>
 <span class="p">)</span>
 
-
 <span class="n">dm</span> <span class="o">=</span> <span class="n">ImageFolderDataModule</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
 <span class="n">dm</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Dataloaders can be accesed from the datamodule like so,</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">dm</span><span class="o">.</span><span class="n">train_dataloader</span><span class="p">():</span>
+    <span class="n">test_eq</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span>
+    <span class="n">test_eq</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span>
+    <span class="k">break</span>
 </pre></div>
 
     </div>
@@ -138,10 +171,50 @@ split transform and process the data</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">dm</span><span class="o">.</span><span class="n">train_dataloader</span><span class="p">():</span>
-    <span class="n">test_eq</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span>
-    <span class="n">test_eq</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span>
-    <span class="k">break</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pytorch_lightning.utilities</span> <span class="kn">import</span> <span class="n">rank_zero_only</span>
+<span class="kn">from</span> <span class="nn">pytorch_lightning.loggers</span> <span class="kn">import</span> <span class="n">LightningLoggerBase</span>
+<span class="kn">from</span> <span class="nn">pytorch_lightning.loggers.base</span> <span class="kn">import</span> <span class="n">rank_zero_experiment</span>
+<span class="kn">from</span> <span class="nn">rich</span> <span class="kn">import</span> <span class="nb">print</span>
+
+<span class="k">class</span> <span class="nc">LightWeightLogger</span><span class="p">(</span><span class="n">LightningLoggerBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A light weight logger that doesn&#39;t save any logs, it will just print to the command line&quot;&quot;&quot;</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;LightWeightLogger&#39;</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@rank_zero_experiment</span>
+    <span class="k">def</span> <span class="nf">experiment</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Return the experiment object associated with this logger.</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Return the experiment version, int or str.</span>
+        <span class="k">return</span> <span class="s1">&#39;0.1&#39;</span>
+
+    <span class="nd">@rank_zero_only</span>
+    <span class="k">def</span> <span class="nf">log_hyperparams</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="c1"># params is an argparse.Namespace</span>
+        <span class="c1"># your code to record hyperparameters goes here</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@rank_zero_only</span>
+    <span class="k">def</span> <span class="nf">log_metrics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">step</span><span class="p">):</span>
+        <span class="c1"># metrics is a dictionary of metric names and values</span>
+        <span class="c1"># your code to record metrics goes here</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">metrics</span><span class="p">)</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Optional. Any code necessary to save logger data goes here</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@rank_zero_only</span>
+    <span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+        <span class="c1"># Optional. Any code that needs to be run after training</span>
+        <span class="c1"># finishes goes here</span>
+        <span class="k">pass</span>
 </pre></div>
 
     </div>
@@ -194,8 +267,11 @@ inheritance.</p>
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">modelname</span> <span class="o">=</span> <span class="s1">&#39;resnet18&#39;</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">CNNModule</span><span class="p">(</span><span class="n">modelname</span><span class="p">,</span> <span class="n">pretrained</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">dm</span><span class="o">.</span><span class="n">trainset</span><span class="o">.</span><span class="n">classes</span><span class="p">))</span>
 
+<span class="c1"># Setup logger</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">LightWeightLogger</span><span class="p">()</span>
+
 <span class="c1"># Run a trial `fast_dev_run` of 5 iterations on the trainset</span>
-<span class="n">trainer</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">Trainer</span><span class="p">(</span><span class="n">gpus</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">checkpoint_callback</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fast_dev_run</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">trainer</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">Trainer</span><span class="p">(</span><span class="n">gpus</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">checkpoint_callback</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
 <span class="n">test_eq</span><span class="p">(</span><span class="n">trainer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">dm</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
 </pre></div>
 
@@ -209,11 +285,9 @@ inheritance.</p>
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>Downloading: &#34;https://download.pytorch.org/models/resnet18-5c106cde.pth&#34; to /root/.cache/torch/hub/checkpoints/resnet18-5c106cde.pth
-GPU available: True, used: True
+<pre>GPU available: True, used: True
 TPU available: None, using: 0 TPU cores
 LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
-Running in fast_dev_run mode: will run a full train, val and test loop using 5 batch(es).
 
   | Name              | Type       | Params
 -------------------------------------------------
