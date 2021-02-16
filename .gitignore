@@ -1,4 +1,5 @@
-tb_logs/*
+*.egg-info
+*_logs/*
 *.pth
 Datasets/*/
 
