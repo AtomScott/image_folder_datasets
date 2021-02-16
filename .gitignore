@@ -1,7 +1,7 @@
 *.egg-info
 *_logs/*
 *.pth
-Datasets/*/
+datasets/*/
 
 *.bak
 .gitattributes

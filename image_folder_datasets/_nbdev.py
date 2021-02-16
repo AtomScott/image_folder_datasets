@@ -2,10 +2,9 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"ImageFolderDataModule": "00_core.ipynb",
-         "CNNModule": "00_core.ipynb"}
+index = {}
 
-modules = ["core.py"]
+modules = []
 
 doc_url = "https://AtomScott.github.io/image_folder_datasets/"
 
