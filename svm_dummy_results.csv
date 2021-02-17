@@ -1,0 +1,3 @@
+,Train time,Test time,clf,dataset,Weighted Fscore,Top-1 score,Top-5 score,n_classes,n_train_samples,n_test_samples
+0,6.548272468149662,0.39263245882466435,SVC,datasets/6000-store-items-images-classified-by-color,0.3147103240287111,0.3525641025641026,0.8141025641025641,12,4991,1248
+1,0.0003657122142612934,3.8128811866045e-05,DummyClassifier,datasets/6000-store-items-images-classified-by-color,0.02293778036218641,0.11298076923076923,0.5552884615384616,12,4991,1248
